@@ -141,7 +141,7 @@ Nessa questão o SELECT foi utilizado para selecionar a coluna que mostra o nome
 
 ---
 
-QUESTÃO 06: prepare um relatório que mostre o nome completo dos funcionários que têm dependentes, o departamento onde eles trabalham e, para cada funcionário, também liste o nome completo dos dependentes, a idade em anos de cada
+QUESTÃO 06: prepare um relatório que mostre o nome completo dos funcionários que têm dependentes, o departamento onde eles trabalham e, para cada funcionário, também liste o nome completo dos dependentes, a idade em anos de cada
 dependente e o sexo (o sexo NÃO DEVE aparecer como M ou F, deve aparecer
 como “Masculino” ou “Feminino”).
 ~~~SQL
@@ -160,7 +160,6 @@ SELECT CASE
             funcionarios.numero_departamento = departamentos.numero_departamento;
 ~~~
 
-
 | nome_funcionarios | numero_departamento | nome_departamento | nome_dependente | idade | sexo      |
 :-------------------|---------------------|-------------------|-----------------|-------|-----------:
 | João B Silva      |                   5 | Pesquisa          | Alícia          |    33 | Feminino  |
@@ -170,4 +169,76 @@ SELECT CASE
 | Fernando T Wong   |                   5 | Pesquisa          | Janaína         |    64 | Feminino  |
 | Fernando T Wong   |                   5 | Pesquisa          | Tiago           |    38 | Masculino |
 | Jennifer S Souza  |                   4 | Administração     | Antonio         |    80 | Masculino |
+
+O SELECT junto com o CONCAT foi utilizado para selecionar e juntar o nome completo dos funcionarios, logo depois juntei o cpf dos funcionarios que tem dependentes e o departamento onde eles trabalham, e pra finalizar, use os comandos para dizer a idade em anos e o sexo dos dependentes.
+
+---
+
+QUESTÃO 07: prepare um relatório que mostre, para cada funcionário que NÃO TEM dependente, seu nome completo, departamento e salário.
+~~~SQL
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+ departamentos.nome_departamento, salario
+  FROM departamentos, funcionarios
+   LEFT JOIN dependentes ON funcionarios.cpf = dependentes.cpf_funcionario
+    WHERE dependentes.cpf_funcionario IS NULL
+     GROUP BY nome_completo;
+~~~
+
+
+| nome_completo   | nome_departamento | salario  |
+:-----------------|-------------------|----------:
+| Joice A Leite   | Pesquisa          | 25000.00 |
+| Ronaldo K Lima  | Pesquisa          | 38000.00 |
+| Jorge E Brito   | Pesquisa          | 55000.00 |
+| André V Pereira | Pesquisa          | 25000.00 |
+| Alice J Zelaya  | Pesquisa          | 25000.00 |
+
+Nesse relatório, usei os comandos para mostrar quem são os funcionários que não tem denpendentes, fiz usando os comando SELECT e CONCAT, usando o comando FROM disse mde qual tabale são.
+
+---
+
+QUESTÃO 08: prepare um relatório que mostre, para cada departamento, os projetos desse departamento e o nome completo dos funcionários que estão alocados
+em cada projeto. Além disso inclua o número de horas trabalhadas por cada funcionário, em cada projeto.
+
+~~~SQL
+SELECT nome_departamento, nome_projeto,
+ CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo, horas
+  FROM departamentos, projeto, funcionarios, trabalha_em
+   WHERE departamentos.numero_departamento = projeto.numero_departamento 
+    AND funcionarios.cpf = trabalha_em.cpf_funcionario 
+     AND projeto.numero_projeto = trabalha_em.numero_projeto
+      ORDER BY nome_departamento, nome_projeto;
+   ~~~
+       
+| nome_departamento | nome_projeto    | nome_completo    | horas |
+:-------------------|-----------------|------------------|-------:
+| Administração     | Informatização  | Fernando T Wong  |  10.0 |
+| Administração     | Informatização  | André V Pereira  |  35.0 |
+| Administração     | Informatização  | Alice J Zelaya   |  10.0 |
+| Administração     | Novosbenefícios | Jennifer S Souza |  20.0 |
+| Administração     | Novosbenefícios | André V Pereira  |   5.0 |
+| Administração     | Novosbenefícios | Alice J Zelaya   |  30.0 |
+| Matriz            | Reorganização   | Fernando T Wong  |  10.0 |
+| Matriz            | Reorganização   | Jorge E Brito    |   0.0 |
+| Matriz            | Reorganização   | Jennifer S Souza |  15.0 |
+| Pesquisa          | ProdutoX        | João B Silva     |  32.5 |
+| Pesquisa          | ProdutoX        | Joice A Leite    |  20.0 |
+| Pesquisa          | ProdutoY        | João B Silva     |   7.5 |
+| Pesquisa          | ProdutoY        | Fernando T Wong  |  10.0 |
+| Pesquisa          | ProdutoY        | Joice A Leite    |  20.0 |
+| Pesquisa          | ProdutoZ        | Fernando T Wong  |  10.0 |
+| Pesquisa          | ProdutoZ        | Ronaldo K Lima   |  40.0 |
+
+Nessa questão eu usei os comandos para mostrar os departamentos, os projetos e o nome dos funcionarios, utilizei os comando SELECT e CONCAT para juntar, o FROM para dizer a tabela, logo depois como foi pedido, inclui as horas trabalhadas.
+
+---
+
+QUESTÃO 09: prepare um relatório que mostre a soma total das horas de cada projeto em cada departamento. Obs.: o relatório deve exibir o nome do departamento, o nome do projeto e a soma total das horas.
+~~~SQL
+SELECT departamentos.nome_departamento, projeto.numero_projeto, nome_projeto, SUM(horas) AS horas_trabalhadas
+FROM departamentos, projeto, trabalha_em
+WHERE projeto.numero_projeto = trabalha_em.numero_projeto
+AND departamentos.numero_departamento = projeto.numero_departamento  
+GOUP BY nome_projeto;
+~~~
 
