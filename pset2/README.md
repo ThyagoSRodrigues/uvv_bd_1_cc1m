@@ -328,4 +328,90 @@ GROUP BY trabalha_em.horas;
 :-------------------|---------------|---------------|-------:
 | Administração     | Reorganização | João B Silva  |   0.0 |
 
-Foi pedido para que descubra qual o funcionário não trabalhou nenhuma hora e o nome do projeto e do departamento, usei novamente o comando SELECT
+Foi pedido para que descubra qual o funcionário não trabalhou nenhuma hora e o nome do projeto e do departamento, usei novamente o comando SELECT e o CONCAT para juntar o nome completo e as horas, o comando WHERE foi usado para filtrar e mostrar somente aquele que tem hora igual a zero, o GROUP BY foi usado para juntar tudo.
+
+---
+
+QUESTÃO 13: durante o natal deste ano a empresa irá presentear todos os funcionários e todos os dependentes (sim, a empresa vai dar um presente para cada funcionário e um presente para cada dependente de cada funcionário) e pediu para que você preparasse um relatório que listasse o nome completo das pessoas a serem presenteadas (funcionários e dependentes), o sexo e a idade em anos completos (para poder comprar um presente adequado). Esse relatório deve estar ordenado pela idade em anos completos, de forma decrescente.
+~~~SQL
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+dependentes.nome_dependente, TIMESTAMPDIFF(year, funcionarios.data_nascimento, now()) AS idade, 
+TIMESTAMPDIFF(year, dependentes.data_nascimento, now()) AS idade_dependente, 
+funcionarios.sexo, dependentes.sexo AS sexo_dependente 
+FROM funcionarios, dependentes
+WHERE funcionarios.cpf = dependentes.cpf_funcionario;
+~~~
+
+
+| nome_completo    | nome_dependente | idade | idade_dependente | sexo | sexo_dependente |
+:------------------|-----------------|-------|------------------|------|-----------------:
+| João B Silva     | Alícia          |    57 |               33 | M    | F               |
+| João B Silva     | Elizabeth       |    57 |               55 | M    | F               |
+| João B Silva     | Michael         |    57 |               34 | M    | M               |
+| Fernando T Wong  | Alícia          |    66 |               36 | M    | F               |
+| Fernando T Wong  | Janaína         |    66 |               64 | M    | F               |
+| Fernando T Wong  | Tiago           |    66 |               38 | M    | M               |
+| Jennifer S Souza | Antonio         |    80 |               80 | F    | M               |
+
+Usei o comando SELECT junto com o CONCAT para juntar os nome dos funcionários e dos dependentes, o TIMESTAMPDIFF para dizer a idade e o sexo dos funcionários e dos dependentes, o fROm para dizer a tabela e o WHERE para filtrar somente aquilo que foi pedido.
+
+---
+
+QUESTÃO 14: prepare um relatório que exiba quantos funcionários cada departamento tem.
+
+~~~SQL
+SELECT nome_departamento,
+CASE 
+WHEN funcionarios.numero_departamento = departamentos.numero_departamento 
+THEN COUNT(departamentos.numero_departamento)
+END AS soma
+FROM funcionarios, departamentos
+WHERE departamentos.numero_departamento = funcionarios.numero_departamento 
+GROUP BY nome_departamento;
+~~~
+
+
+| nome_departamento | soma |
+:-------------------|------:
+| Pesquisa          |    4 |
+| Matriz            |    1 |
+| Administração     |    3 |
+
+Foi pedido para exibir um relatorio que mostra quantos funcionarios existem em cada departamento. Usando o comando SELECT para selecionar o nome do departamento, usei o comando THE COUNT para conatar quantos funcionários a em cada departamento, FROM para dizer de qual tabela, WHERE para filtar e mostrar somente o que foi pedido, pra finalizar o GROUP BY para juntar.
+
+---
+
+QUESTÃO 15: como um funcionário pode estar alocado em mais de um projeto, prepare um relatório que exiba o nome completo do funcionário, o departamento desse funcionário e o nome dos projetos em que cada funcionário está alocado. Atenção: se houver algum funcionário que não está alocado em nenhum projeto, o nome completo e o departamento também devem aparecer no relatório.
+
+~~~SQL
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+departamentos.nome_departamento, projeto.nome_projeto
+FROM funcionarios, departamentos, projeto, trabalha_em
+WHERE funcionarios.cpf = trabalha_em.cpf_funcionario 
+AND departamentos.numero_departamento = funcionarios.numero_departamento 
+AND projeto.numero_projeto = trabalha_em.numero_projeto;
+~~~
+
+
+| nome_completo    | nome_departamento | nome_projeto    |
+:------------------|-------------------|-----------------:
+| João B Silva     | Pesquisa          | ProdutoX        |
+| João B Silva     | Pesquisa          | ProdutoY        |
+| Fernando T Wong  | Pesquisa          | ProdutoY        |
+| Fernando T Wong  | Pesquisa          | ProdutoZ        |
+| Fernando T Wong  | Pesquisa          | Informatização  |
+| Fernando T Wong  | Pesquisa          | Reorganização   |
+| Joice A Leite    | Pesquisa          | ProdutoX        |
+| Joice A Leite    | Pesquisa          | ProdutoY        |
+| Ronaldo K Lima   | Pesquisa          | ProdutoZ        |
+| Jorge E Brito    | Matriz            | Reorganização   |
+| Jennifer S Souza | Administração     | Reorganização   |
+| Jennifer S Souza | Administração     | Novosbenefícios |
+| André V Pereira  | Administração     | Informatização  |
+| André V Pereira  | Administração     | Novosbenefícios |
+| Alice J Zelaya   | Administração     | Informatização  |
+| Alice J Zelaya   | Administração     | Novosbenefícios |
+
+A ultima questão foi pedido para preparar um relatório que exiba o nome completo do funcionário, o departamento desse funcionário e o nome dos projetos em que cada funcionário está alocado. Usando o comando SELECT e o CONCAT para juntar o nome completo dos funcionários, do departamento e dos projetos, o FROM para dizer de qual tabela pertencem, e o WHERE para filtar somente o que foi pedido pela questão.
+
+---
