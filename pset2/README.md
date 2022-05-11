@@ -1,4 +1,11 @@
-# Design e Desenvolvimento de Banco de Dados - UVV
-Repositório criado para hospedar as atividades avaliativas da matéria de Design e Desenvolvimento de Banco de Dados.
+# _Pset1_
+### Nesse Pset aprendi sobre implementação de projetos lógicos, como utilizar o MySQL/MariaDB e o PostgreSQL e Sistema de Controle de Versão
+---
 
-`Pset`: *_Problem Set_* é um conjunto de problemas e tarefas difíceis (alguns extremamente difíceis) que o forçarão a estudar e realmente compreender a matéria.
+**Aluno: Thyago Silveira Rodrigues**
+
+**Professor: Abrantes Araujo Silva Filho**
+
+**Monitora: Suellen Miranda Amorim**
+
+---
