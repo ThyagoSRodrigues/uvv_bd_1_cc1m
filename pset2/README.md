@@ -236,9 +236,96 @@ Nessa questão eu usei os comandos para mostrar os departamentos, os projetos e 
 QUESTÃO 09: prepare um relatório que mostre a soma total das horas de cada projeto em cada departamento. Obs.: o relatório deve exibir o nome do departamento, o nome do projeto e a soma total das horas.
 ~~~SQL
 SELECT departamentos.nome_departamento, projeto.numero_projeto, nome_projeto, SUM(horas) AS horas_trabalhadas
-FROM departamentos, projeto, trabalha_em
-WHERE projeto.numero_projeto = trabalha_em.numero_projeto
-AND departamentos.numero_departamento = projeto.numero_departamento  
-GOUP BY nome_projeto;
+ FROM departamentos, projeto, trabalha_em
+  WHERE projeto.numero_projeto = trabalha_em.numero_projeto
+   AND departamentos.numero_departamento = projeto.numero_departamento  
+    GOUP BY nome_projeto;
 ~~~
 
+
+| nome_departamento | numero_projeto | nome_projeto    | horas_trabalhadas |
+:-------------------|----------------|-----------------|-------------------:
+| Pesquisa          |              1 | ProdutoX        |              52.5 |
+| Pesquisa          |              2 | ProdutoY        |              37.5 |
+| Pesquisa          |              3 | ProdutoZ        |              50.0 |
+| Administração     |             10 | Informatização  |              55.0 |
+| Matriz            |             20 | Reorganização   |              25.0 |
+| Administração     |             30 | Novosbenefícios |              55.0 |
+
+Foi pedido para preparar um relatório mostrando a soma total das horas trabalhadas em cada departamento. Utilizando novamente o comando SELECT selecionei as colunas das tabelas ditas no FROM, logo depois, usando o comando WHERE como um filtro para extrair somente o que eu quero e o comando GROUP BY para juntar tudo.
+
+---
+
+QUESTÃO 10: prepare um relatório que mostre a média salarial dos funcionários de cada departamento.
+~~~SQL
+SELECT funcionarios.numero_departamento, AVG(funcionarios.salario) AS media_salarial
+FROM funcionarios
+JOIN departamentos
+ON departamentos.numero_departamento = funcionarios.numero_departamento
+GROUP BY funcionarios.numero_departamento;
+~~~
+
+
+| numero_departamento | media_salarial |
+:---------------------|----------------:
+|                   5 |   33250.000000 |
+|                   1 |   55000.000000 |
+|                   4 |   31000.000000 |
+
+Para fazer essa questão eu usei o comando SELECT para selecionar as colunas, e o FROM para dizer as tabelas, o JOIN foi utilizado para combinar duas tabelas diferente, nesse caso, a tabela funcionario com a tabela departamento. E para finalizar usei o GROUP BY foi usado para juntar a tabela funcionario com o numero do departamento.
+
+---
+
+QUESTÃO 11: considerando que o valor pago por hora trabalhada em um projeto é de 50 reais, prepare um relatório que mostre o nome completo do funcionário, o
+nome do projeto e o valor total que o funcionário receberá referente às horas trabalhadas naquele projeto.
+~~~SQL
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+projeto.nome_projeto, salario * 50 * horas AS salario_total
+FROM funcionarios, projeto, trabalha_em
+WHERE funcionarios.cpf =trabalha_em.cpf_funcionario 
+AND projeto.numero_projeto = trabalha_em.numero_projeto;
+~~~
+
+
+| nome_completo    | nome_projeto    | salario_total |
+:------------------|-----------------|---------------:
+| Fernando T Wong  | Informatização  |  20000000.000 |
+| André V Pereira  | Informatização  |  43750000.000 |
+| Alice J Zelaya   | Informatização  |  12500000.000 |
+| Jennifer S Souza | Novosbenefícios |  43000000.000 |
+| André V Pereira  | Novosbenefícios |   6250000.000 |
+| Alice J Zelaya   | Novosbenefícios |  37500000.000 |
+| João B Silva     | ProdutoX        |  48750000.000 |
+| Joice A Leite    | ProdutoX        |  25000000.000 |
+| João B Silva     | ProdutoY        |  11250000.000 |
+| Fernando T Wong  | ProdutoY        |  20000000.000 |
+| Joice A Leite    | ProdutoY        |  25000000.000 |
+| Fernando T Wong  | ProdutoZ        |  20000000.000 |
+| Ronaldo K Lima   | ProdutoZ        |  76000000.000 |
+| Fernando T Wong  | Reorganização   |  20000000.000 |
+| Jorge E Brito    | Reorganização   |         0.000 |
+| Jennifer S Souza | Reorganização   |  32250000.000 |
+
+O comando SELECT foi utilizado junto com o comando CONCAT para juntar o nome dos funcionarios, nome dos porojetos e o salario total, o FROM foi usado para dizer de quais tabela essas colunas pertencem, o WHERE para extrair somente  o que foi pedido.
+
+---
+
+QUESTÃO 12: seu chefe está verificando as horas trabalhadas pelos funcionários nos projetos e percebeu que alguns funcionários, mesmo estando alocadas à algum
+projeto, não registraram nenhuma hora trabalhada. Sua tarefa é preparar um relatório que liste o nome do departamento, o nome do projeto e o nome dos funcionários
+que, mesmo estando alocados a algum projeto, não registraram nenhuma hora trabalhada.
+
+~~~SQL
+SELECT departamentos.nome_departamento, projeto.nome_projeto, 
+CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+trabalha_em.horas
+FROM departamentos, projeto, funcionarios, trabalha_em
+WHERE trabalha_em.horas = 0
+GROUP BY trabalha_em.horas;
+~~~
+
+
+| nome_departamento | nome_projeto  | nome_completo | horas |
+:-------------------|---------------|---------------|-------:
+| Administração     | Reorganização | João B Silva  |   0.0 |
+
+Foi pedido para que descubra qual o funcionário não trabalhou nenhuma hora e o nome do projeto e do departamento, usei novamente o comando SELECT
