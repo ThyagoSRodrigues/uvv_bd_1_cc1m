@@ -1,5 +1,5 @@
 # _Pset2_
-### Nesse Pset aprendi sobre implementação de projetos lógicos, como utilizar o MySQL/MariaDB e o PostgreSQL e Sistema de Controle de Versão
+### Nesse Pset aprendi como criar relatório utulizando os comando do MariaDB.
 ---
 
 **Aluno: Thyago Silveira Rodrigues**
