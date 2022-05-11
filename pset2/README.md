@@ -1,4 +1,4 @@
-# _Pset1_
+# _Pset2_
 ### Nesse Pset aprendi sobre implementação de projetos lógicos, como utilizar o MySQL/MariaDB e o PostgreSQL e Sistema de Controle de Versão
 ---
 
