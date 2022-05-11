@@ -1,0 +1,126 @@
+SELECT funcionarios.numero_departamento, AVG(funcionarios.salario) AS media_do_salario
+FROM funcionarios 
+JOIN departamentos
+ON departamentos.numero_departamento = funcionarios.numero_departamento
+GROUP BY funcionarios.numero_departamento;
+
+
+SELECT funcionarios.sexo, AVG(funcionarios.salario) AS media_do_salario
+FROM funcionarios
+GROUP BY funcionarios.sexo;
+
+
+SELECT nome_departamento, CONCAT(primeiro_nome,' ', nome_meio,' ',ultimo_nome) AS nome_completo,
+data_nascimento, timestampdiff(year, data_nascimento, now()) as idade, funcionarios.salario
+FROM departamentos, funcionarios
+WHERE departamentos.numero_departamento = funcionarios.numero_departamento;
+
+
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+timestampdiff(year, data_nascimento, now()) as idade, salario, 
+CASE
+WHEN salario < 35000 then salario * 1.2
+ELSE salario * 1.15
+end as reajuste_salarial
+FROM funcionarios;
+
+
+SELECT nome_departamento,                   
+CASE
+WHEN funcionarios.cpf = departamentos.cpf_gerente THEN 'gerente'
+ELSE 'funcionarios'
+END AS cargo,
+CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo, salario
+FROM departamentos, funcionarios
+WHERE departamentos.numero_departamento = funcionarios.numero_departamento
+ORDER BY nome_departamento, salario DESC;
+
+
+SELECT CASE
+WHEN funcionarios.cpf = dependentes.cpf_funcionario THEN 
+CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome)
+END AS nome_funcionarios,
+funcionarios.numero_departamento, departamentos.nome_departamento, nome_dependente,
+TIMESTAMPDIFF(year, dependentes.data_nascimento, now()) AS idade,
+CASE
+WHEN dependentes.sexo = 'M' THEN 'Masculino'
+ELSE 'Feminino'
+END AS sexo
+FROM funcionarios, departamentos, dependentes
+WHERE funcionarios.cpf = dependentes.cpf_funcionario AND
+funcionarios.numero_departamento = departamentos.numero_departamento;              
+
+
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+departamentos.nome_departamento, salario
+FROM departamentos, funcionarios
+LEFT JOIN dependentes ON funcionarios.cpf = dependentes.cpf_funcionario
+WHERE dependentes.cpf_funcionario IS NULL
+GROUP BY nome_completo;
+
+
+SELECT nome_departamento, nome_projeto,
+CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo, horas
+FROM departamentos, projeto, funcionarios, trabalha_em
+WHERE departamentos.numero_departamento = projeto.numero_departamento 
+AND funcionarios.cpf = trabalha_em.cpf_funcionario 
+AND projeto.numero_projeto = trabalha_em.numero_projeto
+ORDER BY nome_departamento, nome_projeto;
+
+
+SELECT departamentos.nome_departamento, projeto.numero_projeto, nome_projeto, SUM(horas) AS horas_trabalhadas
+FROM departamentos, projeto, trabalha_em
+WHERE projeto.numero_projeto = trabalha_em.numero_projeto
+AND departamentos.numero_departamento = projeto.numero_departamento 
+GROUP BY nome_projeto;
+
+
+SELECT funcionarios.numero_departamento, AVG(funcionarios.salario) AS media_salarial
+FROM funcionarios
+JOIN departamentos
+ON departamentos.numero_departamento = funcionarios.numero_departamento
+GROUP BY funcionarios.numero_departamento;
+
+
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+projeto.nome_projeto, salario * 50 * horas AS salario_total
+FROM funcionarios, projeto, trabalha_em
+WHERE funcionarios.cpf =trabalha_em.cpf_funcionario 
+AND projeto.numero_projeto = trabalha_em.numero_projeto;
+
+
+
+SELECT departamentos.nome_departamento, projeto.nome_projeto, 
+CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+trabalha_em.horas
+FROM departamentos, projeto, funcionarios, trabalha_em
+WHERE trabalha_em.horas = 0
+GROUP BY trabalha_em.horas;
+
+
+
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+dependentes.nome_dependente, TIMESTAMPDIFF(year, funcionarios.data_nascimento, now()) AS idade, 
+TIMESTAMPDIFF(year, dependentes.data_nascimento, now()) AS idade_dependente, 
+funcionarios.sexo, dependentes.sexo AS sexo_dependente 
+FROM funcionarios, dependentes
+WHERE funcionarios.cpf = dependentes.cpf_funcionario;
+
+
+SELECT nome_departamento,
+CASE 
+WHEN funcionarios.numero_departamento = departamentos.numero_departamento 
+THEN COUNT(departamentos.numero_departamento)
+END AS soma
+FROM funcionarios, departamentos
+WHERE departamentos.numero_departamento = funcionarios.numero_departamento 
+GROUP BY nome_departamento;
+
+
+
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, ' ', ultimo_nome) AS nome_completo,
+departamentos.nome_departamento, projeto.nome_projeto
+FROM funcionarios, departamentos, projeto, trabalha_em
+WHERE funcionarios.cpf = trabalha_em.cpf_funcionario 
+AND departamentos.numero_departamento = funcionarios.numero_departamento 
+AND projeto.numero_projeto = trabalha_em.numero_projeto;
