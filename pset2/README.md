@@ -239,7 +239,7 @@ SELECT departamentos.nome_departamento, projeto.numero_projeto, nome_projeto, SU
  FROM departamentos, projeto, trabalha_em
   WHERE projeto.numero_projeto = trabalha_em.numero_projeto
    AND departamentos.numero_departamento = projeto.numero_departamento  
-    GOUP BY nome_projeto;
+    GROUP BY nome_projeto;
 ~~~
 
 
